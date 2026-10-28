@@ -216,4 +216,14 @@ $('#projectSearch')?.addEventListener('input',filterProjects);$('#projectFilter'
 function filterProjects(){const q=($('#projectSearch')?.value||'').toLowerCase();const f=$('#projectFilter')?.value||'all';let n=0;$$('#allProjects .project-card').forEach(c=>{const ok=(c.dataset.title||'').includes(q)&&(f==='all'||c.dataset.status===f);c.classList.toggle('hide',!ok);if(ok)n++});$('#noProjects').classList.toggle('hide',n>0)}
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();$('#profileDropdown').classList.remove('open');$('#sidebar').classList.remove('open')}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();toast('ذخیره‌سازی در این نسخه فعال نیست.')}});
 </script>
+<!-- The public marketing prototype remains available; account actions enter the PHP app. -->
+<script>
+document.addEventListener('click', function(event) {
+  var trigger = event.target.closest('[data-page="auth"]');
+  if (!trigger) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  window.location.href = 'app.php?page=login';
+}, true);
+</script>
 </body></html>
