@@ -287,9 +287,9 @@ try {
               };
               recorder.start(1000);
               say('در حال رندر در مرورگر… ویدئو را تا پایان پخش نگه دارید.');
-              requestAnimationFrame(() => renderFrame(ctx));
               video.addEventListener('ended', () => { if (recorder && recorder.state !== 'inactive') recorder.stop(); }, {once:true});
               await video.play();
+              requestAnimationFrame(() => renderFrame(ctx));
             } catch (error) {
               if (recorder && recorder.state !== 'inactive') recorder.stop();
               else {
