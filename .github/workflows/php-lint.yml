@@ -20,3 +20,5 @@ jobs:
         run: |
           php -l app.php
           php -l config.example.php
+      - name: Check browser JavaScript syntax
+        run: node --check assets/js/webm-export.js
