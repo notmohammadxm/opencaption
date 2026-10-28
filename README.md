@@ -17,13 +17,14 @@ OpenCaption is a Persian-first subtitle creation and editing project. The reposi
 - Authenticated video streaming with byte-range support for browser seeking.
 - Manual subtitle segment creation, editing, and deletion.
 - SRT download from saved segments.
+- Browser-side WebM rendering with timed caption overlays and best-effort audio capture, using the video canvas and MediaRecorder APIs; no server-side FFmpeg required for this path.
 - Initial MySQL schema for users, projects, and subtitle segments.
 
 ### Not implemented yet
 - Automatic speech recognition / AI transcription.
 - Background workers, retries, and real processing progress.
 - Visual timeline synchronization, drag/drop caption editing, undo/redo, autosave.
-- WebM/MP4 rendering or FFmpeg integration.
+- MP4 rendering, server-side FFmpeg integration, and cross-browser validation of WebM export. WebM is currently browser-rendered and depends on browser codec/audio capture support and client resources.
 - TTS, provider API-key management, billing/usage tracking, password reset, email/SMS verification, profile editing, and font/template persistence.
 - Full production security review and cross-browser/hosting tests.
 
