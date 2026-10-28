@@ -58,7 +58,7 @@ function layout_start(string $title, string $active='projects'): void {
 @media(max-width:960px){.shell{grid-template-columns:1fr;padding:14px}.sidebar{position:fixed;z-index:20;top:0;right:0;bottom:0;height:100vh;width:270px;border-radius:0 0 0 18px;transform:translateX(110%);transition:transform .2s}.sidebar.open{transform:translateX(0)}.mobilemenu{display:inline-flex}.stats{grid-template-columns:1fr}.projects{grid-template-columns:repeat(2,minmax(0,1fr))}.editorgrid{grid-template-columns:1fr}.topbar h1{font-size:21px}}
 @media(max-width:580px){.projects,.formgrid{grid-template-columns:1fr}.formgrid .full{grid-column:auto}.topbar{align-items:flex-start}.topactions .btn{font-size:12px;padding:8px 10px}.panel{padding:16px}.projectfoot{align-items:flex-start;flex-direction:column}.segment{grid-template-columns:74px minmax(0,1fr)}.segment form:last-child{grid-column:2}.authwrap{padding:12px}.authpanel{padding:20px}}
 </style></head><body>
-<?php if ($u): ?><div class="shell"><aside class="sidebar" id="sidebar"><a class="brand" href="?page=dashboard"><span class="brandmark">◈</span><span>OpenCaption<small style="display:block;color:#9d8e7d;font-size:10px;font-weight:500">استودیوی زیرنویس</small></span></a><div class="navlabel">فضای کاری</div><nav class="nav"><a class="<?=$active==='projects'?'active':''?>" href="?page=dashboard"><span class="ico">▦</span>پروژه‌های من</a><a class="<?=$active==='new'?'active':''?>" href="?page=new"><span class="ico">＋</span>پروژه جدید</a><a class="<?=$active==='settings'?'active':''?>" href="?page=settings"><span class="ico">⚙</span>تنظیمات</a></nav><div class="sidebottom"><div class="profile"><div class="avatar"><?=e(mb_substr($u['name'],0,1,'UTF-8'))?></div><div><?=e($u['name'])?><small><?=e($u['email'])?></small></div></div><a class="nav" style="display:block;padding:10px;color:#a79b90" href="?page=logout">↪ خروج از حساب</a></div></aside><main><header class="topbar"><div class="inline"><button class="iconbtn mobilemenu" type="button" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button><div><div class="crumb">OpenCaption / <?=e($title)?></div><h1><?=e($title)?></h1></div></div><div class="topactions"><a class="btn" href="?page=new">＋ پروژه جدید</a></div></header>
+<?php if ($u): ?><div class="shell"><aside class="sidebar" id="sidebar"><a class="brand" href="?page=dashboard"><span class="brandmark">◈</span><span>OpenCaption<small style="display:block;color:#9d8e7d;font-size:10px;font-weight:500">استودیوی زیرنویس</small></span></a><div class="navlabel">فضای کاری</div><nav class="nav"><a class="<?=$active==='projects'?'active':''?>" href="?page=dashboard"><span class="ico">▦</span>پروژه‌های من</a><a class="<?=$active==='new'?'active':''?>" href="?page=new"><span class="ico">＋</span>پروژه جدید</a><a class="<?=$active==='settings'?'active':''?>" href="?page=settings"><span class="ico">⚙</span>تنظیمات</a></nav><div class="sidebottom"><div class="profile"><div class="avatar"><?=e(mb_substr($u['name'],0,1,'UTF-8'))?></div><div><?=e($u['name'])?><small><?=e($u['email'])?></small></div></div><form method="post" style="padding:0 10px"><input type="hidden" name="_csrf" value="<?=e(csrf())?>"><input type="hidden" name="action" value="logout"><button class="secondary" type="submit" style="width:100%;justify-content:flex-start">↪ خروج از حساب</button></form></div></aside><main><header class="topbar"><div class="inline"><button class="iconbtn mobilemenu" type="button" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button><div><div class="crumb">OpenCaption / <?=e($title)?></div><h1><?=e($title)?></h1></div></div><div class="topactions"><a class="btn" href="?page=new">＋ پروژه جدید</a></div></header>
 <?php if ($f): ?><div class="notice <?=e($f['type'])?>"><?=e($f['message'])?></div><?php endif; ?>
 <?php else: ?><div class="authwrap"><div class="authbrand"><a class="brand" href="?page=login"><span class="brandmark">◈</span><span>OpenCaption</span></a></div><?php if ($f): ?><div class="notice <?=e($f['type'])?>"><?=e($f['message'])?></div><?php endif; ?><?php endif;
 }
@@ -86,7 +86,7 @@ try {
         while ($remaining>0 && !feof($fp)) { $chunk=fread($fp,min(8192,$remaining)); if ($chunk===false || $chunk==='') break; echo $chunk; $remaining-=strlen($chunk); }
         fclose($fp); exit;
     }
-    if ($page==='logout') { $_SESSION=[]; if (ini_get('session.use_cookies')) { $p=session_get_cookie_params(); setcookie(session_name(),'',['expires'=>time()-42000,'path'=>$p['path'],'domain'=>$p['domain'],'secure'=>$p['secure'],'httponly'=>$p['httponly'],'samesite'=>'Lax']); } session_destroy(); go('?page=login'); }
+    if ($page==='logout') go('?page=dashboard');
     if ($_SERVER['REQUEST_METHOD']==='POST') {
         verify_csrf();
         if ($action==='register') {
@@ -102,6 +102,11 @@ try {
             $q=db()->prepare('SELECT id,name,email,phone,password_hash FROM users WHERE email=? OR phone=? LIMIT 1'); $q->execute([strtolower($identity),$identity]); $row=$q->fetch();
             if (!$row || !password_verify($pass,$row['password_hash'])) { flash('اطلاعات ورود صحیح نیست.','error'); go('?page=login'); }
             session_regenerate_id(true); $_SESSION['user']=['id'=>(int)$row['id'],'name'=>$row['name'],'email'=>$row['email']]; $_SESSION['csrf']=bin2hex(random_bytes(32)); go('?page=dashboard');
+        }
+        if ($action==='logout') {
+            $_SESSION=[];
+            if (ini_get('session.use_cookies')) { $p=session_get_cookie_params(); setcookie(session_name(),'',['expires'=>time()-42000,'path'=>$p['path'],'domain'=>$p['domain'],'secure'=>$p['secure'],'httponly'=>$p['httponly'],'samesite'=>'Lax']); }
+            session_destroy(); go('?page=login');
         }
         $u=require_user();
         if ($action==='create_project') {
