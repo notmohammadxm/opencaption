@@ -1,0 +1,22 @@
+name: PHP syntax check
+
+on:
+  push:
+    branches: [main, ui-prototype, production-foundation]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql, fileinfo, mbstring
+      - name: Lint PHP files
+        run: |
+          php -l app.php
+          php -l config.example.php
