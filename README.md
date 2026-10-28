@@ -16,7 +16,7 @@ OpenCaption is a Persian-first subtitle creation and editing project. The reposi
 - Video uploads with extension and MIME checks, randomized storage names, configured size limit, and a private storage directory.
 - Authenticated video streaming with byte-range support for browser seeking.
 - Manual subtitle segment creation, editing, and deletion.
-- SRT download from saved segments.
+- SRT and WebVTT downloads from saved segments.
 - Browser-side WebM rendering with timed caption overlays and best-effort audio capture, using the video canvas and MediaRecorder APIs; no server-side FFmpeg required for this path.
 - Initial MySQL schema for users, projects, and subtitle segments.
 
