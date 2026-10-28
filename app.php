@@ -62,9 +62,9 @@ function layout_start(string $title, string $active='projects'): void {
 <?php if ($f): ?><div class="notice <?=e($f['type'])?>"><?=e($f['message'])?></div><?php endif; ?>
 <?php else: ?><div class="authwrap"><div class="authbrand"><a class="brand" href="?page=login"><span class="brandmark">◈</span><span>OpenCaption</span></a></div><?php if ($f): ?><div class="notice <?=e($f['type'])?>"><?=e($f['message'])?></div><?php endif; ?><?php endif;
 }
-function layout_end(): void { if (current_user()) echo '</main></div>'; else echo '</div>'; } ?>
+function layout_end(): void { if (current_user()) echo '</main></div>'; else echo '</div>'; ?>
 <script>document.querySelectorAll('[data-confirm]').forEach(function(el){el.addEventListener('click',function(ev){if(!confirm(el.getAttribute('data-confirm')))ev.preventDefault()})});document.querySelectorAll('input[type=file][data-filename]').forEach(function(el){el.addEventListener('change',function(){var out=document.getElementById(el.dataset.filename);if(out)out.textContent=el.files.length?el.files[0].name:'فایلی انتخاب نشده است'})});</script></body></html>
-<?php
+<?php }
 $page = (string)($_GET['page'] ?? (current_user() ? 'dashboard' : 'login'));
 $action = (string)($_POST['action'] ?? '');
 try {
