@@ -36,7 +36,7 @@ The WebM idea (rendering timed captions over a video in a browser) remains a can
 2. Create a MySQL database and database user in cPanel, and grant the user privileges.
 3. Import database/schema.sql using phpMyAdmin.
 4. Copy config.example.php to config.php; fill in database credentials and verify the upload directory path and limit.
-5. Ensure PHP 8.1+, PDO MySQL, Fileinfo, and preferably mbstring are enabled.
+5. Ensure PHP 8.1+, PDO MySQL, Fileinfo, and mbstring are enabled.
 6. Ensure storage/uploads is writable by PHP. Keep it non-public; its .htaccess denies direct requests.
 7. Set the host's PHP upload limits (upload_max_filesize, post_max_size, and execution/request limits) to values appropriate for your plan.
 
